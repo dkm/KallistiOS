@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -x
 # Make sure what mode we're in. The basic cc wrapper does a lot.
 ARGS=$*
 USEMODE=0

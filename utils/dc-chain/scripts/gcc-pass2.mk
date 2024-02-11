@@ -4,6 +4,11 @@
 # Created by Jim Ursetto (2004)
 # Initially adapted from Stalin's build script version 0.3.
 #
+disable_libada=""
+
+ifneq (,$(findstring ada,$(pass2_languages)))
+	disable_libada=--disable-libada
+endif
 
 $(build_gcc_pass2): build = build-gcc-$(target)-$(gcc_ver)-pass2
 $(build_gcc_pass2): logdir
@@ -14,6 +19,7 @@ $(build_gcc_pass2): logdir
         ../$(src_dir)/configure \
           --target=$(target) \
           --prefix=$(prefix) \
+	        $(disable_libada) \
           --with-newlib \
           --disable-libssp \
           --enable-threads=$(thread_model) \
@@ -26,5 +32,8 @@ $(build_gcc_pass2): logdir
           $(static_flag) \
           $(to_log)
 	$(MAKE) $(makejobs) -C $(build) DESTDIR=$(DESTDIR) $(to_log)
+ifneq (,$(findstring ada,$(pass2_languages)))
+	  $(MAKE) $(makejobs) -C $(build)/gcc cross-gnattools DESTDIR=$(DESTDIR) $(to_log)
+endif
 	$(MAKE) -C $(build) $(install_mode) DESTDIR=$(DESTDIR) $(to_log)
 	$(clean_up)
