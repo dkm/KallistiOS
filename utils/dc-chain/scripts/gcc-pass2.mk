@@ -20,6 +20,8 @@ $(build_gcc_pass2): logdir
           --target=$(target) \
           --prefix=$(prefix) \
 	        $(disable_libada) \
+          --with-gnu-as \
+          --with-gnu-ld \
           --with-newlib \
           --disable-libssp \
           --enable-threads=$(thread_model) \
